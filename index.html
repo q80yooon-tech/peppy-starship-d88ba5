@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PinkFile Tools — Free PDF & Image Tools Online | No Registration</title>
+<meta name="description" content="Free online PDF & Image tools: JPG to PDF, PDF to JPG, Merge PDF, Compress Image, Resize Image, Image to PDF, A4 PDF Creator, Image Format Converter. No registration, no login — 100% in your browser.">
+<meta name="keywords" content="jpg to pdf, pdf to jpg, merge pdf, compress image, resize image, image to pdf, a4 pdf creator, image format converter, free pdf tools">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#f06292">
+<link rel="canonical" href="https://pinkfile.tools/">
+<!-- Open Graph / Facebook / Instagram -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PinkFile Tools">
+<meta property="og:title" content="PinkFile Tools — Free PDF & Image Tools, No Registration">
+<meta property="og:description" content="Create. Convert. Resize. Done. Free PDF & image tools that run entirely in your browser. No signup, no uploads to a server.">
+<meta property="og:url" content="https://pinkfile.tools/">
+<meta property="og:image" content="https://pinkfile.tools/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PinkFile Tools — Free PDF & Image Tools">
+<meta name="twitter:description" content="Create. Convert. Resize. Done. 100% free, no registration.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"PinkFile Tools","url":"https://pinkfile.tools/",
+ "potentialAction":{"@type":"SearchAction","target":"https://pinkfile.tools/?q={search_term_string}","query-input":"required name=search_term_string"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Is PinkFile Tools really free?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every tool is 100% free with no limits, no watermarks and no hidden costs."}},
+{"@type":"Question","name":"Do I need to register or provide an email?","acceptedAnswer":{"@type":"Answer","text":"No. There is no registration, no login and no email required. Open a tool, drop your files and download the result."}},
+{"@type":"Question","name":"Are my files uploaded to a server?","acceptedAnswer":{"@type":"Answer","text":"No. All processing happens locally in your browser using WebAssembly and the Canvas API. Your files never leave your device."}},
+{"@type":"Question","name":"Does it work on Android and iPhone?","acceptedAnswer":{"@type":"Answer","text":"Yes. PinkFile Tools is mobile-first and works on Android, iPhone, tablets and desktop browsers."}},
+{"@type":"Question","name":"Why is my HEIC/RAW file not supported?","acceptedAnswer":{"@type":"Answer","text":"Some camera formats (HEIC, RAW) are not decodable in browsers. Convert them to JPG or PNG first, then use our tools."}}
+]}
+</script>
+<style>
+:root{
+  --pink-50:#fff5f8; --pink-100:#ffe3ee; --pink-200:#ffc2da; --pink-300:#ff9ec4;
+  --pink-400:#f56ba6; --pink-500:#ec407a; --pink-600:#d81b60; --pink-700:#ad1457;
+  --ink:#3d1f2e; --ink-soft:#7a5566; --white:#ffffff;
+  --radius:22px; --shadow:0 10px 40px rgba(216,27,96,.14);
+  --shadow-lg:0 18px 60px rgba(216,27,96,.22);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(160deg,#fff5f8 0%,#ffe3ee 25%,#ffc9de 50%,#ff9ec4 80%,#f56ba6 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+  line-height:1.6;
+}
+a{color:var(--pink-600);text-decoration:none}
+a:hover{text-decoration:underline}
+img{max-width:100%;display:block}
+.container{width:100%;max-width:1100px;margin:0 auto;padding:0 18px}
+
+
+/* ---------- Header ticker ---------- */
+.header-ticker{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(90deg,#ad1457,#ec407a,#f56ba6,#ec407a,#ad1457);
+  background-size:300% 100%;
+  animation:tickerGlow 8s linear infinite;
+  color:#fff;
+  min-height:34px;
+  display:flex;
+  align-items:center;
+  box-shadow:0 3px 18px rgba(216,27,96,.28);
+}
+.header-ticker::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.38) 45%,transparent 65%);
+  transform:translateX(-100%);
+  animation:tickerShine 3.5s ease-in-out infinite;
+}
+.ticker-track{
+  display:flex;
+  width:max-content;
+  white-space:nowrap;
+  animation:tickerMove 24s linear infinite;
+  position:relative;
+  z-index:1;
+}
+.ticker-item{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:6px 28px;
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.2px;
+}
+@keyframes tickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes tickerShine{0%,55%{transform:translateX(-100%)}75%,100%{transform:translateX(100%)}}
+@keyframes tickerGlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@media(prefers-reduced-motion:reduce){
+  .ticker-track,.header-ticker,.header-ticker::after{animation:none}
+}
+
+/* ---------- Header ---------- */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(236,64,122,.15);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:1.2rem;color:var(--pink-700);text-decoration:none}
+.logo:hover{text-decoration:none}
+.logo-badge{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--pink-400),var(--pink-600));display:grid;place-items:center;font-size:18px;box-shadow:0 4px 14px rgba(216,27,96,.35)}
+.nav-links{display:none;gap:20px;font-weight:600;font-size:.92rem}
+.nav-links a{color:var(--ink)}
+.burger{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--pink-600)}
+.mobile-menu{display:none;background:rgba(255,255,255,.97);border-bottom:1px solid var(--pink-100);padding:10px 18px 16px}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;padding:10px 4px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--pink-100)}
+@media(min-width:860px){.nav-links{display:flex}.burger{display:none}}
+
+/* ---------- Hero ---------- */
+.hero{text-align:center;padding:56px 18px 34px}
+.hero .pill{display:inline-block;background:var(--white);color:var(--pink-600);font-weight:700;font-size:.82rem;letter-spacing:.4px;padding:7px 16px;border-radius:999px;box-shadow:var(--shadow);margin-bottom:18px}
+.hero h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.15;font-weight:900;color:var(--ink)}
+.hero h1 .grad{background:linear-gradient(90deg,var(--pink-500),var(--pink-700));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p.sub{margin:16px auto 26px;max-width:620px;color:var(--ink-soft);font-size:1.06rem}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font-weight:700;font-size:1rem;padding:14px 26px;border-radius:999px;transition:transform .15s ease,box-shadow .15s ease;text-decoration:none}
+.btn:hover{text-decoration:none;transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(135deg,var(--pink-400),var(--pink-600));color:#fff;box-shadow:0 8px 24px rgba(216,27,96,.4)}
+.btn-primary:hover{box-shadow:0 12px 32px rgba(216,27,96,.5)}
+.btn-ghost{background:var(--white);color:var(--pink-600);box-shadow:var(--shadow)}
+.badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.badge{background:rgba(255,255,255,.8);border:1px solid rgba(236,64,122,.2);color:var(--ink-soft);font-size:.8rem;font-weight:600;padding:6px 14px;border-radius:999px}
+
+/* ---------- Sections ---------- */
+section{padding:38px 0}
+.sec-title{font-size:clamp(1.4rem,4vw,2rem);font-weight:800;text-align:center;margin-bottom:6px}
+.sec-sub{text-align:center;color:var(--ink-soft);margin-bottom:26px}
+
+/* ---------- Cards / grids ---------- */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.card{
+  background:var(--white);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:8px;transition:transform .18s ease,box-shadow .18s ease;
+  position:relative;overflow:hidden;
+}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.card .icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:26px;background:linear-gradient(135deg,var(--pink-100),var(--pink-200));margin-bottom:4px}
+.card h3{font-size:1.08rem;font-weight:800}
+.card p{font-size:.88rem;color:var(--ink-soft);flex:1}
+.card .go{font-weight:700;color:var(--pink-600);font-size:.92rem}
+.tag{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,var(--pink-500),var(--pink-700));color:#fff;font-size:.68rem;font-weight:800;padding:4px 10px;border-radius:999px;letter-spacing:.5px}
+
+/* ---------- Ad slots ---------- */
+.ad-slot{
+  margin:26px auto;max-width:760px;border:2px dashed rgba(216,27,96,.35);border-radius:var(--radius);
+  background:rgba(255,255,255,.55);color:var(--ink-soft);text-align:center;
+  font-size:.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:22px;display:grid;place-items:center;min-height:96px;
+}
+
+/* ---------- How it works ---------- */
+.steps{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.step{background:var(--white);border-radius:var(--radius);padding:24px;text-align:center;box-shadow:var(--shadow)}
+.step .num{width:44px;height:44px;margin:0 auto 10px;border-radius:50%;background:linear-gradient(135deg,var(--pink-400),var(--pink-600));color:#fff;display:grid;place-items:center;font-weight:900;font-size:1.15rem}
+.step h3{font-size:1rem;font-weight:800;margin-bottom:6px}
+.step p{font-size:.86rem;color:var(--ink-soft)}
+
+
+/* ---------- Tool information / SEO content ---------- */
+.tool-info{
+  display:grid;
+  gap:18px;
+  margin-top:30px;
+}
+.tool-info-card{
+  background:rgba(255,255,255,.9);
+  border-radius:var(--radius);
+  padding:26px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(236,64,122,.1);
+}
+.tool-info-card h2{
+  font-size:1.25rem;
+  font-weight:850;
+  margin-bottom:12px;
+}
+.tool-info-card p{
+  color:var(--ink-soft);
+  font-size:.94rem;
+  margin-bottom:10px;
+}
+.tool-info-card strong{color:var(--ink)}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:760px;margin:0 auto}
+.faq details{background:var(--white);border-radius:16px;box-shadow:var(--shadow);margin-bottom:12px;padding:16px 20px;cursor:pointer}
+.faq summary{font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:1.4rem;color:var(--pink-500);font-weight:800}
+.faq details[open] summary::after{content:"−"}
+.faq details p{margin-top:10px;color:var(--ink-soft);font-size:.92rem}
+
+/* ---------- Privacy ---------- */
+.privacy{background:rgba(255,255,255,.85);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);max-width:820px;margin:0 auto}
+.privacy p{color:var(--ink-soft);font-size:.94rem;margin-bottom:12px}
+.privacy strong{color:var(--ink)}
+
+/* ---------- Tool page ---------- */
+.tool-wrap{max-width:760px;margin:0 auto;padding:34px 0 50px}
+.tool-head{text-align:center;margin-bottom:24px}
+.tool-head .crumb{font-size:.8rem;color:var(--ink-soft);margin-bottom:8px}
+.tool-head h1{font-size:clamp(1.5rem,5vw,2.2rem);font-weight:900}
+.tool-head p{color:var(--ink-soft);margin-top:8px;max-width:560px;margin-left:auto;margin-right:auto}
+.tool-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:22px}
+.dropzone{
+  border:2.5px dashed var(--pink-300);border-radius:18px;background:var(--pink-50);
+  padding:36px 18px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;
+}
+.dropzone:hover,.dropzone.over{border-color:var(--pink-500);background:var(--pink-100)}
+.dropzone .dz-icon{font-size:44px;margin-bottom:8px}
+.dropzone p{font-weight:700}
+.dropzone small{color:var(--ink-soft)}
+.browse{color:var(--pink-600);font-weight:800;text-decoration:underline}
+input[type=file]{display:none}
+.opts{display:flex;flex-wrap:wrap;gap:14px;margin:16px 0}
+.opt{display:flex;flex-direction:column;gap:5px;font-size:.84rem;font-weight:700;color:var(--ink-soft)}
+.opt select,.opt input[type=number],.opt input[type=range],.opt textarea{
+  font:inherit;padding:9px 12px;border-radius:12px;border:1.5px solid var(--pink-200);background:#fff;color:var(--ink);font-weight:600;min-width:120px;
+}
+.opt textarea{width:100%;min-height:150px;resize:vertical;font-weight:500;line-height:1.6}
+.opt select:focus,.opt input:focus,.opt textarea:focus{outline:none;border-color:var(--pink-500);box-shadow:0 0 0 3px rgba(236,64,122,.15)}
+.preview{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.thumb{width:86px;height:86px;border-radius:14px;overflow:hidden;border:2px solid var(--pink-100);position:relative;background:#fff}
+.thumb img,.thumb canvas{width:100%;height:100%;object-fit:cover}
+.thumb .rm{position:absolute;top:3px;right:3px;background:rgba(61,31,46,.75);color:#fff;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px;line-height:1}
+.thumb .lbl{position:absolute;bottom:0;left:0;right:0;background:rgba(61,31,46,.7);color:#fff;font-size:.6rem;padding:2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.progress{height:12px;background:var(--pink-100);border-radius:999px;overflow:hidden;margin:18px 0;display:none}
+.progress.show{display:block}
+.progress .bar{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--pink-400),var(--pink-600));transition:width .2s ease}
+.btn-run{width:100%;justify-content:center;margin-top:6px}
+.btn-run:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.result{margin-top:18px;display:none}
+.result.show{display:block;text-align:center;padding:20px;border-radius:16px;background:linear-gradient(135deg,var(--pink-50),var(--pink-100));border:1.5px solid var(--pink-200)}
+.result .ok{font-size:2rem}
+.result p{font-weight:700;margin:6px 0 14px}
+.result .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.error{display:none;margin-top:14px;padding:13px 16px;border-radius:14px;background:#ffe9e9;border:1.5px solid #ffb3b3;color:#a12020;font-size:.9rem;font-weight:600}
+.error.show{display:block}
+.btn-again{background:var(--white);color:var(--pink-600);border:2px solid var(--pink-300)}
+.related{margin-top:40px}
+.related h2{font-size:1.15rem;font-weight:800;margin-bottom:14px;text-align:center}
+
+footer{background:rgba(61,31,46,.92);color:#ffd6e8;padding:36px 0 24px;margin-top:40px}
+footer .cols{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:24px}
+footer h4{color:#fff;font-size:.95rem;margin-bottom:10px}
+footer a{display:block;color:#ffc2da;font-size:.86rem;padding:3px 0}
+footer a:hover{color:#fff}
+footer .copy{text-align:center;font-size:.78rem;border-top:1px solid rgba(255,255,255,.15);padding-top:18px;color:#e79dbb}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:600;font-size:.88rem;opacity:0;transition:all .3s ease;z-index:99;box-shadow:var(--shadow-lg)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-ticker" aria-label="PinkFile Tools features">
+    <div class="ticker-track">
+      <span class="ticker-item">✨ Free PDF & Image Tools</span>
+      <span class="ticker-item">🔒 Private — Files stay on your device</span>
+      <span class="ticker-item">⚡ Fast browser-based processing</span>
+      <span class="ticker-item">📱 Works on Mobile & Desktop</span>
+      <span class="ticker-item">🚫 No Registration • No Watermarks</span>
+      <span class="ticker-item">✨ Free PDF & Image Tools</span>
+      <span class="ticker-item">🔒 Private — Files stay on your device</span>
+      <span class="ticker-item">⚡ Fast browser-based processing</span>
+      <span class="ticker-item">📱 Works on Mobile & Desktop</span>
+      <span class="ticker-item">🚫 No Registration • No Watermarks</span>
+    </div>
+  </div>
+  <div class="container nav">
+    <a class="logo" href="#/"><span class="logo-badge">🌸</span> PinkFile<span style="color:var(--pink-400)">Tools</span></a>
+    <nav class="nav-links">
+      <a href="#/">Home</a>
+      <a href="#/" onclick="goSection(event,'popular')">Popular</a>
+      <a href="#/" onclick="goSection(event,'pdf-tools')">PDF Tools</a>
+      <a href="#/" onclick="goSection(event,'img-tools')">Image Tools</a>
+      <a href="#/" onclick="goSection(event,'faq')">FAQ</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#/">🏠 Home</a>
+    <a href="#/jpg-to-pdf">🖼️ JPG to PDF</a>
+    <a href="#/pdf-to-jpg">📄 PDF to JPG</a>
+    <a href="#/merge-pdf">🔗 Merge PDF</a>
+    <a href="#/compress-image">🗜️ Compress Image</a>
+    <a href="#/resize-image">📐 Resize Image</a>
+    <a href="#/image-to-pdf">🌄 Image to PDF</a>
+    <a href="#/a4-pdf-creator">📝 A4 PDF Creator</a>
+    <a href="#/image-format-converter">🔄 Format Converter</a>
+  </div>
+</header>
+
+<main id="app" aria-live="polite"></main>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div class="container">
+    <div class="cols">
+      <div>
+        <h4>🌸 PinkFile Tools</h4>
+        <p style="font-size:.85rem">Free PDF & image tools that run in your browser. Simple, private and easy to use.</p>
+      </div>
+      <div>
+        <h4>PDF Tools</h4>
+        <a href="#/jpg-to-pdf">JPG to PDF</a>
+        <a href="#/pdf-to-jpg">PDF to JPG</a>
+        <a href="#/merge-pdf">Merge PDF</a>
+        <a href="#/image-to-pdf">Image to PDF</a>
+        <a href="#/a4-pdf-creator">A4 PDF Creator</a>
+      </div>
+      <div>
+        <h4>Image Tools</h4>
+        <a href="#/compress-image">Compress Image</a>
+        <a href="#/resize-image">Resize Image</a>
+        <a href="#/image-format-converter">Format Converter</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="#/" onclick="goSection(event,'about')">About Us</a>
+        <a href="#/" onclick="goSection(event,'contact')">Contact</a>
+        <a href="#/" onclick="goSection(event,'privacy')">Privacy Policy</a>
+        <a href="#/" onclick="goSection(event,'faq')">FAQ</a>
+      </div>
+    </div>
+    <div class="copy">© 2026 PinkFile Tools — Create. Convert. Resize. Done. 🔒 Your files stay on your device.</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+"use strict";
+/* ================= PDF.js setup ================= */
+pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const A4 = [595.28, 841.89];
+const LETTER = [612, 792];
+const esc = s => s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtBytes = b => b < 1024 ? b+" B" : b < 1048576 ? (b/1024).toFixed(1)+" KB" : (b/1048576).toFixed(2)+" MB";
+
+let toastTimer;
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("show"), 2600); }
+
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 4000);
+}
+
+async function fileToImage(file){
+  const bmp = await createImageBitmap(file).catch(()=>{ throw new Error("This image format can't be opened by your browser (try JPG, PNG or WebP)."); });
+  return bmp;
+}
+
+function bmpToCanvas(bmp, maxW){
+  let w = bmp.width, h = bmp.height;
+  if (maxW && w > maxW){ h = Math.round(h * maxW / w); w = maxW; }
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  c.getContext("2d").drawImage(bmp, 0, 0, w, h);
+  return c;
+}
+
+function canvasToBlob(canvas, type, quality){
+  return new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error("Could not encode the image.")), type, quality));
+}
+
+/* ================= Tool definitions ================= */
+const TOOLS = [
+  {
+    id:"jpg-to-pdf", icon:"🖼️", cat:"pdf", popular:true, tag:"POPULAR",
+    name:"JPG to PDF", short:"Turn JPG/PNG photos into a single polished PDF in seconds.",
+    seoTitle:"JPG to PDF — Convert Images to PDF Free Online | PinkFile Tools",
+    seoDesc:"Convert JPG and PNG images to PDF online for free. No registration, no watermarks. Drag, drop, download — all in your browser.",
+    accept:"image/jpeg,image/png,image/webp", multiple:true,
+    extra:`<div class="opt"><label>Page size</label>
+      <select id="opt-size"><option value="fit">Fit image (keep size)</option><option value="a4">A4 page (fit image)</option><option value="letter">Letter page (fit image)</option></select></div>`,
+    run: async (files, ui) => {
+      const size = ui.val("opt-size");
+      const { PDFDocument } = PDFLib;
+      const pdf = await PDFDocument.create();
+      for (let i=0;i<files.length;i++){
+        ui.pg((i/files.length)*90, "Adding "+files[i].name+"…");
+        const bmp = await fileToImage(files[i]);
+        const bytes = await files[i].arrayBuffer();
+        let img;
+        try { img = await pdf.embedJpg(bytes); } catch(e){ try { img = await pdf.embedPng(bytes); } catch(e2){ throw new Error(files[i].name+" isn't a JPG/PNG file."); } }
+        let pw, ph;
+        if (size === "a4"){ [pw,ph] = A4; } else if (size === "letter"){ [pw,ph] = LETTER; } else { pw = img.width; ph = img.height; }
+        const page = pdf.addPage([pw, ph]);
+        const s = Math.min(pw/img.width, ph/img.height);
+        const w = img.width*s, h = img.height*s;
+        page.drawImage(img, { x:(pw-w)/2, y:(ph-h)/2, width:w, height:h });
+        bmp.close && bmp.close();
+      }
+      ui.pg(95, "Saving PDF…");
+      const out = await pdf.save();
+      ui.done(new Blob([out], {type:"application/pdf"}), "pinkfile-jpg-to-pdf.pdf", "PDF created from "+files.length+" image"+(files.length>1?"s":"")+" 🎉");
+    }
+  },
+  {
+    id:"pdf-to-jpg", icon:"📄", cat:"pdf", popular:true, tag:"POPULAR",
+    name:"PDF to JPG", short:"Export every PDF page as a high-quality JPG image.",
+    seoTitle:"PDF to JPG — Convert PDF Pages to Images Free | PinkFile Tools",
+    seoDesc:"Convert PDF pages to JPG images online, free. High quality 2x export, single file download or ZIP. No registration — runs in your browser.",
+    accept:"application/pdf", multiple:false,
+    extra:`<div class="opt"><label>Quality</label>
+      <select id="opt-q"><option value="2">High (2x)</option><option value="1.5">Medium (1.5x)</option><option value="3">Ultra (3x)</option></select></div>`,
+    run: async (files, ui) => {
+      const scale = parseFloat(ui.val("opt-q"));
+      const buf = await files[0].arrayBuffer();
+      const doc = await pdfjsLib.getDocument({ data: buf }).promise;
+      const zip = new JSZip();
+      const pages = [];
+      for (let p=1; p<=doc.numPages; p++){
+        ui.pg(((p-1)/doc.numPages)*92, "Rendering page "+p+" of "+doc.numPages+"…");
+        const page = await doc.getPage(p);
+        const vp = page.getViewport({ scale });
+        const c = document.createElement("canvas");
+        c.width = Math.ceil(vp.width); c.height = Math.ceil(vp.height);
+        await page.render({ canvasContext: c.getContext("2d"), viewport: vp }).promise;
+        const blob = await canvasToBlob(c, "image/jpeg", 0.92);
+        if (doc.numPages === 1){ ui.done(blob, files[0].name.replace(/\.pdf$/i,"")+".jpg", "1 page exported as JPG 🎉"); return; }
+        zip.file("page-"+String(p).padStart(2,"0")+".jpg", blob);
+        pages.push(blob);
+      }
+      ui.pg(96, "Packing ZIP…");
+      const zb = await zip.generateAsync({ type:"blob" });
+      ui.done(zb, files[0].name.replace(/\.pdf$/i,"")+"-pages.zip", doc.numPages+" pages exported as JPG (ZIP) 🎉");
+    }
+  },
+  {
+    id:"merge-pdf", icon:"🔗", cat:"pdf", popular:true, tag:"POPULAR",
+    name:"Merge PDF", short:"Combine multiple PDFs into one file, in the order you choose.",
+    seoTitle:"Merge PDF — Combine PDF Files Free Online | PinkFile Tools",
+    seoDesc:"Merge multiple PDF files into one PDF online for free. Reorder, combine, download. No signup, no watermarks, 100% private in-browser merging.",
+    accept:"application/pdf", multiple:true,
+    extra:``,
+    run: async (files, ui) => {
+      if (files.length < 2) throw new Error("Please add at least 2 PDF files to merge.");
+      const { PDFDocument } = PDFLib;
+      const merged = await PDFDocument.create();
+      for (let i=0;i<files.length;i++){
+        ui.pg((i/files.length)*92, "Merging "+files[i].name+"…");
+        const src = await PDFDocument.load(await files[i].arrayBuffer(), { ignoreEncryption: true });
+        const pages = await merged.copyPages(src, src.getPageIndices());
+        pages.forEach(p => merged.addPage(p));
+      }
+      ui.pg(96, "Saving merged PDF…");
+      const out = await merged.save();
+      ui.done(new Blob([out], {type:"application/pdf"}), "pinkfile-merged.pdf", files.length+" PDFs merged into one 🎉");
+    }
+  },
+  {
+    id:"compress-image", icon:"🗜️", cat:"image", popular:true, tag:"POPULAR",
+    name:"Compress Image", short:"Shrink JPG/PNG/WebP file size with smart quality control.",
+    seoTitle:"Compress Image — Reduce Image Size Free Online | PinkFile Tools",
+    seoDesc:"Compress images online for free. Reduce JPG, PNG and WebP file size with adjustable quality. No upload to servers — private, fast, unlimited.",
+    accept:"image/*", multiple:true,
+    extra:`<div class="opt"><label>Quality: <span id="qv">70</span>%</label>
+      <input type="range" id="opt-q" min="10" max="95" value="70" style="min-width:150px" oninput="document.getElementById('qv').textContent=this.value"></div>
+      <div class="opt"><label>Max width (px)</label><input type="number" id="opt-w" placeholder="original" min="100" max="10000"></div>`,
+    run: async (files, ui) => {
+      const q = parseInt(ui.val("opt-q"))/100;
+      const maxW = parseInt(ui.val("opt-w")) || 0;
+      const zip = new JSZip(); let n = 0, saved = 0;
+      for (let i=0;i<files.length;i++){
+        ui.pg((i/files.length)*92, "Compressing "+files[i].name+"…");
+        const bmp = await fileToImage(files[i]);
+        const c = bmpToCanvas(bmp, maxW || (bmp.width > 2600 ? 2600 : 0));
+        const type = /png$/i.test(files[i].name) ? "image/png" : "image/webp";
+        const blob = await canvasToBlob(c, type === "image/png" ? "image/png" : "image/webp", q);
+        bmp.close && bmp.close();
+        saved += files[i].size - blob.size;
+        if (files.length === 1){
+          const ext = type === "image/png" ? "png" : "webp";
+          const pct = files[i].size ? Math.round((1 - blob.size/files[i].size)*100) : 0;
+          ui.done(blob, files[i].name.replace(/\.[^.]+$/,"")+"-compressed."+ext,
+            "Compressed "+fmtBytes(files[i].size)+" → "+fmtBytes(blob.size)+" ("+(pct>0?pct+"% smaller":Math.abs(pct)+"% larger")+") 🎉");
+          return;
+        }
+        zip.file(files[i].name.replace(/\.[^.]+$/,"")+"-compressed."+(type==="image/png"?"png":"webp"), blob); n++;
+      }
+      ui.pg(96, "Packing ZIP…");
+      ui.done(await zip.generateAsync({type:"blob"}), "pinkfile-compressed.zip", n+" images compressed 🎉");
+    }
+  },
+  {
+    id:"resize-image", icon:"📐", cat:"image", popular:false,
+    name:"Resize Image", short:"Resize to exact pixels or by percentage — aspect ratio protected.",
+    seoTitle:"Resize Image — Change Image Dimensions Free Online | PinkFile Tools",
+    seoDesc:"Resize images online free: exact pixels or percentage, lock aspect ratio, convert format too. No registration, works on mobile & desktop.",
+    accept:"image/*", multiple:true,
+    extra:`<div class="opt"><label>New width (px)</label><input type="number" id="opt-w" min="1" max="20000" placeholder="e.g. 800"></div>
+      <div class="opt"><label>New height (px)</label><input type="number" id="opt-h" min="1" max="20000" placeholder="auto"></div>
+      <div class="opt"><label>Output format</label><select id="opt-f"><option value="original">Same as input</option><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></div>`,
+    run: async (files, ui) => {
+      const wIn = parseInt(ui.val("opt-w")), hIn = parseInt(ui.val("opt-h"));
+      if (!wIn && !hIn) throw new Error("Enter a width or a height to resize to.");
+      const zip = new JSZip();
+      for (let i=0;i<files.length;i++){
+        ui.pg((i/files.length)*92, "Resizing "+files[i].name+"…");
+        const bmp = await fileToImage(files[i]);
+        let w = wIn || Math.round(bmp.width * (hIn / bmp.height));
+        let h = hIn || Math.round(bmp.height * (wIn / bmp.width));
+        const c = document.createElement("canvas"); c.width = w; c.height = h;
+        c.getContext("2d").drawImage(bmp, 0, 0, w, h);
+        bmp.close && bmp.close();
+        const fmt = ui.val("opt-f") === "original"
+          ? (/png$/i.test(files[i].name) ? "image/png" : /webp$/i.test(files[i].name) ? "image/webp" : "image/jpeg")
+          : ui.val("opt-f");
+        const blob = await canvasToBlob(c, fmt, 0.92);
+        const ext = { "image/png":"png", "image/webp":"webp", "image/jpeg":"jpg" }[fmt];
+        if (files.length === 1){ ui.done(blob, files[i].name.replace(/\.[^.]+$/,"")+"-"+w+"x"+h+"."+ext, "Resized to "+w+"×"+h+" px 🎉"); return; }
+        zip.file(files[i].name.replace(/\.[^.]+$/,"")+"-"+w+"x"+h+"."+ext, blob);
+      }
+      ui.pg(96, "Packing ZIP…");
+      ui.done(await zip.generateAsync({type:"blob"}), "pinkfile-resized.zip", files.length+" images resized 🎉");
+    }
+  },
+  {
+    id:"image-to-pdf", icon:"🌄", cat:"pdf", popular:false,
+    name:"Image to PDF", short:"Any image → a clean multi-page A4 PDF, one photo per page.",
+    seoTitle:"Image to PDF — Convert Any Image to A4 PDF Free | PinkFile Tools",
+    seoDesc:"Convert JPG, PNG, WebP images to a multi-page A4 PDF online free. One image per page, auto-centered. No signup, private in-browser conversion.",
+    accept:"image/*", multiple:true,
+    extra:`<div class="opt"><label>Layout</label>
+      <select id="opt-l"><option value="full">Full page per image (A4)</option><option value="margin">Full page with margin (A4)</option></select></div>`,
+    run: async (files, ui) => {
+      const margin = ui.val("opt-l") === "margin" ? 40 : 0;
+      const { PDFDocument } = PDFLib;
+      const pdf = await PDFDocument.create();
+      for (let i=0;i<files.length;i++){
+        ui.pg((i/files.length)*92, "Placing "+files[i].name+"…");
+        const bytes = await files[i].arrayBuffer();
+        let img;
+        try { img = await pdf.embedJpg(bytes); } catch(e){ try { img = await pdf.embedPng(bytes); } catch(e2){ throw new Error(files[i].name+": only JPG and PNG can be embedded in a PDF."); } }
+        const [pw, ph] = A4;
+        const page = pdf.addPage([pw, ph]);
+        const s = Math.min((pw-2*margin)/img.width, (ph-2*margin)/img.height);
+        const w = img.width*s, h = img.height*s;
+        page.drawImage(img, { x:(pw-w)/2, y:(ph-h)/2, width:w, height:h });
+      }
+      ui.pg(96, "Saving PDF…");
+      const out = await pdf.save();
+      ui.done(new Blob([out], {type:"application/pdf"}), "pinkfile-images.pdf", files.length+" image"+(files.length>1?"s":"")+" placed on A4 pages 🎉");
+    }
+  },
+  {
+    id:"a4-pdf-creator", icon:"📝", cat:"pdf", popular:false,
+    name:"A4 PDF Creator", short:"Type or paste text and get a perfectly formatted A4 PDF.",
+    seoTitle:"A4 PDF Creator — Make a Printable A4 PDF from Text | PinkFile Tools",
+    seoDesc:"Create a printable A4 PDF from plain text online, free. Choose font size and margins. Instant download, no registration needed.",
+    accept:null, multiple:false,
+    extra:`<div class="opt" style="flex:1 1 100%"><label>Your text</label>
+      <textarea id="opt-text" placeholder="Type or paste your text here…">Dear team,
+
+This PDF was created with PinkFile Tools — free, private, and blazing fast.
+
+Best regards,
+You 🌸</textarea></div>
+      <div class="opt"><label>Font size</label><input type="number" id="opt-fs" value="12" min="8" max="48"></div>
+      <div class="opt"><label>Margins</label><select id="opt-m"><option value="60">Normal</option><option value="40">Narrow</option><option value="80">Wide</option></select></div>`,
+    run: async (files, ui) => {
+      const text = ui.val("opt-text").trim();
+      if (!text) throw new Error("Please type some text first.");
+      const fs = Math.min(48, Math.max(8, parseInt(ui.val("opt-fs")) || 12));
+      const m = parseInt(ui.val("opt-m"));
+      const { PDFDocument, StandardFonts, rgb } = PDFLib;
+      const pdf = await PDFDocument.create();
+      const font = await pdf.embedFont(StandardFonts.Helvetica);
+      const [pw, ph] = A4;
+      const lineH = fs * 1.45;
+      const maxW = pw - 2*m;
+      const words = text.split(/\s+/);
+      const lines = []; let line = "";
+      for (const w of words){
+        const t = line ? line + " " + w : w;
+        if (font.widthOfTextAtSize(t, fs) <= maxW) line = t;
+        else { if (line) lines.push(line); line = w; if (font.widthOfTextAtSize(w, fs) > maxW){ let chunk=""; for (const ch of w){ if (font.widthOfTextAtSize(chunk+ch, fs) <= maxW) chunk += ch; else { lines.push(chunk); chunk = ch; } } line = chunk; } }
+      }
+      if (line) lines.push(line);
+      const perPage = Math.floor((ph - 2*m) / lineH);
+      if (!perPage) throw new Error("Font size is too large for the page. Try a smaller size.");
+      for (let i=0; i<lines.length; i += perPage){
+        ui.pg(60, "Writing page "+(i/perPage+1)+"…");
+        const page = pdf.addPage([pw, ph]);
+        const chunk = lines.slice(i, i+perPage);
+        chunk.forEach((l, j) => page.drawText(l, { x:m, y: ph - m - fs - j*lineH, size: fs, font, color: rgb(0.15,0.08,0.12) }));
+      }
+      ui.pg(92, "Saving PDF…");
+      const out = await pdf.save();
+      ui.done(new Blob([out], {type:"application/pdf"}), "pinkfile-a4-document.pdf", "A4 PDF created ("+Math.ceil(lines.length/perPage)+" page"+(Math.ceil(lines.length/perPage)>1?"s":"")+") 🎉");
+    }
+  },
+  {
+    id:"image-format-converter", icon:"🔄", cat:"image", popular:false,
+    name:"Image Format Converter", short:"Convert between JPG, PNG and WebP — lossless or tuned.",
+    seoTitle:"Image Format Converter — JPG PNG WebP Free Online | PinkFile Tools",
+    seoDesc:"Convert images between JPG, PNG and WebP online for free. Batch conversion with ZIP download. No registration, no watermarks, fully private.",
+    accept:"image/*", multiple:true,
+    extra:`<div class="opt"><label>Convert to</label>
+      <select id="opt-f"><option value="image/png">PNG (lossless)</option><option value="image/jpeg">JPG (small)</option><option value="image/webp">WebP (smallest)</option></select></div>`,
+    run: async (files, ui) => {
+      const fmt = ui.val("opt-f");
+      const ext = { "image/png":"png", "image/webp":"webp", "image/jpeg":"jpg" }[fmt];
+      const zip = new JSZip();
+      for (let i=0;i<files.length;i++){
+        ui.pg((i/files.length)*92, "Converting "+files[i].name+"…");
+        const bmp = await fileToImage(files[i]);
+        const c = document.createElement("canvas"); c.width = bmp.width; c.height = bmp.height;
+        const ctx = c.getContext("2d");
+        if (fmt === "image/jpeg"){ ctx.fillStyle = "#fff"; ctx.fillRect(0,0,c.width,c.height); }
+        ctx.drawImage(bmp, 0, 0);
+        bmp.close && bmp.close();
+        const blob = await canvasToBlob(c, fmt, fmt === "image/png" ? undefined : 0.92);
+        if (files.length === 1){ ui.done(blob, files[i].name.replace(/\.[^.]+$/,"")+"."+ext, "Converted to "+ext.toUpperCase()+" 🎉"); return; }
+        zip.file(files[i].name.replace(/\.[^.]+$/,"")+"."+ext, blob);
+      }
+      ui.pg(96, "Packing ZIP…");
+      ui.done(await zip.generateAsync({type:"blob"}), "pinkfile-converted.zip", files.length+" images converted 🎉");
+    }
+  }
+];
+
+/* ================= Tool page UI ================= */
+function buildToolUI(tool){
+  const isFileTool = !!tool.accept;
+  return `
+  <div class="tool-wrap">
+    <div class="tool-head">
+      <div class="crumb"><a href="#/">Home</a> › ${esc(tool.name)}</div>
+      <h1>${tool.icon} ${esc(tool.name)}</h1>
+      <p>${esc(tool.short)} Free, unlimited, and 100% private — files are processed on your device.</p>
+    </div>
+    <div class="tool-card">
+      ${isFileTool ? `
+      <div class="dropzone" id="dz" role="button" tabindex="0" aria-label="Upload files">
+        <div class="dz-icon">📥</div>
+        <p>Drag & drop files here</p>
+        <small>or <span class="browse">browse your device</span>${tool.multiple ? " — you can add multiple files" : ""}</small><br>
+        <small style="display:block;margin-top:6px">📱 On mobile? Tap to choose from gallery or camera.</small>
+      </div>
+      <input type="file" id="fi" accept="${tool.accept}" ${tool.multiple ? "multiple" : ""}>
+      <div class="preview" id="pv"></div>
+      <div style="margin-top:12px;font-size:.84rem;color:var(--ink-soft)"><span id="cnt">No files yet</span></div>
+      ` : ""}
+      <div class="opts">${tool.extra || ""}</div>
+      <div class="progress" id="pg"><div class="bar" id="bar"></div></div>
+      <div id="pglbl" style="font-size:.84rem;color:var(--ink-soft);min-height:1.2em"></div>
+      <button class="btn btn-primary btn-run" id="run">▶ ${isFileTool ? "Process files" : "Create PDF"}</button>
+      <div class="error" id="err"></div>
+      <div class="result" id="res">
+        <div class="ok">✅</div>
+        <p id="resmsg"></p>
+        <div class="row">
+          <a class="btn btn-primary" id="dl" download>⬇️ Download result</a>
+          <button class="btn btn-again" id="again">🔄 Start Again</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="tool-info" aria-label="Tool information">
+      <div class="tool-info-card">
+        <h2>📘 About this tool</h2>
+        <p><strong>What it does:</strong> ${esc(tool.name)} helps you work with your files quickly and privately. ${esc(tool.short)}</p>
+        <p><strong>How to use it:</strong> ${isFileTool ? "Choose your file or drag and drop it into the upload box, select your preferred options, then click the processing button. When finished, download your result." : "Enter or paste your content, choose the available options, then click the create button to generate your PDF. Download the finished file when it is ready."}</p>
+        <p><strong>Privacy:</strong> Processing is designed to happen in your browser, so your selected files are not intentionally uploaded to a PinkFile Tools server.</p>
+      </div>
+      <div class="tool-info-card">
+        <h2>❓ Frequently Asked Questions</h2>
+        <div class="faq">
+          <details><summary>Is this tool free?</summary><p>Yes. PinkFile Tools is designed to provide these tools free of charge, with no registration required.</p></details>
+          <details><summary>Do I need to create an account?</summary><p>No. You can use the tool without creating an account or providing an email address.</p></details>
+          <details><summary>Are my files uploaded?</summary><p>File processing is performed in your browser. Your files are intended to remain on your device while the tool works.</p></details>
+          <details><summary>Can I use it on my phone?</summary><p>Yes. The site is designed for Android, iPhone, tablets and desktop browsers.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <div class="related">
+      <h2>🧰 Related free tools</h2>
+      <div class="grid" id="rel"></div>
+    </div>
+  </div>`;
+}
+
+function initTool(tool, mount){
+  mount.innerHTML = buildToolUI(tool);
+  document.title = tool.seoTitle;
+  setMeta("description", tool.seoDesc);
+  $("#rel", mount).innerHTML = TOOLS.filter(t => t.id !== tool.id).slice(0,4)
+    .map(t => `<a class="card" href="#/${t.id}" style="text-decoration:none;color:inherit">
+      <div class="icon">${t.icon}</div><h3>${esc(t.name)}</h3><p>${esc(t.short)}</p><span class="go">Open tool →</span></a>`).join("");
+
+  const state = { files: [] };
+  const dz = $("#dz", mount), fi = $("#fi", mount), pv = $("#pv", mount),
+        cnt = $("#cnt", mount), pg = $("#pg", mount), bar = $("#bar", mount),
+        pglbl = $("#pglbl", mount), runBtn = $("#run", mount), err = $("#err", mount),
+        res = $("#res", mount);
+
+  const ui = {
+    val: id => { const e = document.getElementById(id); return e ? e.value : ""; },
+    pg: (pct, msg) => { pg.classList.add("show"); bar.style.width = Math.min(100,pct)+"%"; pglbl.textContent = msg || ""; },
+    done: (blob, filename, msg) => {
+      bar.style.width = "100%"; pglbl.textContent = "";
+      const url = URL.createObjectURL(blob);
+      const dl = $("#dl", mount); dl.href = url; dl.download = filename;
+      $("#resmsg", mount).textContent = msg + " (" + fmtBytes(blob.size) + ")";
+      res.classList.add("show");
+      dl.onclick = () => toast("Downloading " + filename + "…");
+    }
+  };
+
+  function showErr(msg){ err.textContent = "⚠️ " + msg; err.classList.add("show"); }
+  function clearErr(){ err.classList.remove("show"); }
+
+  function renderPreview(){
+    pv.innerHTML = "";
+    state.files.forEach((f, i) => {
+      const d = document.createElement("div"); d.className = "thumb";
+      if (f.type.startsWith("image/")){
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(f);
+        img.onload = () => URL.revokeObjectURL(img.src);
+        d.appendChild(img);
+      } else {
+        const cv = document.createElement("canvas");
+        const draw = (txt) => { cv.width = cv.height = 172; const x = cv.getContext("2d"); x.fillStyle="#ffe3ee"; x.fillRect(0,0,172,172); x.fillStyle="#d81b60"; x.font="bold 44px Arial"; x.textAlign="center"; x.fillText(txt,86,100); };
+        draw("PDF");
+        d.appendChild(cv);
+      }
+      const lbl = document.createElement("div"); lbl.className = "lbl"; lbl.textContent = f.name; d.appendChild(lbl);
+      const rm = document.createElement("button"); rm.className = "rm"; rm.textContent = "×"; rm.title = "Remove";
+      rm.onclick = (e) => { e.stopPropagation(); state.files.splice(i,1); renderPreview(); };
+      d.appendChild(rm);
+      pv.appendChild(d);
+    });
+    cnt.textContent = state.files.length ? state.files.length + " file(s) • " + fmtBytes(state.files.reduce((a,f)=>a+f.size,0)) : "No files yet";
+  }
+
+  function addFiles(list){
+    clearErr(); res.classList.remove("show");
+    const arr = [...list];
+    const bad = arr.filter(f => tool.accept && !tool.accept.split(",").some(a => f.type === a || (a.endsWith("/*") && f.type.startsWith(a.slice(0,-1)))));
+    if (bad.length) showErr("Skipped unsupported: " + bad.map(b=>b.name).join(", ") + ". " + (tool.id === "pdf-to-jpg" || tool.id === "merge-pdf" ? "This tool only accepts PDF files." : "Try JPG, PNG or WebP."));
+    const good = arr.filter(f => !bad.includes(f));
+    state.files = tool.multiple ? state.files.concat(good) : good.slice(0,1);
+    renderPreview();
+    if (good.length) toast("Added " + good.length + " file(s) ✨");
+  }
+
+  if (dz){
+    dz.onclick = () => fi.click();
+    dz.onkeydown = e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); fi.click(); } };
+    fi.onchange = () => { addFiles(fi.files); fi.value = ""; };
+    ["dragenter","dragover"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add("over"); }));
+    ["dragleave","drop"].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove("over"); }));
+    dz.addEventListener("drop", e => addFiles(e.dataTransfer.files));
+  }
+
+  $("#again", mount).onclick = () => {
+    state.files = []; renderPreview(); res.classList.remove("show");
+    pg.classList.remove("show"); bar.style.width = "0%"; pglbl.textContent = ""; clearErr();
+    runBtn.disabled = false;
+    const t = document.getElementById("opt-text"); if (t) t.focus();
+    toast("Ready to go again 🌸");
+  };
+
+  runBtn.onclick = async () => {
+    if (tool.accept && !state.files.length){ showErr("Please add at least one file first — tap the box above to browse or drag files in."); return; }
+    clearErr(); res.classList.remove("show");
+    runBtn.disabled = true; runBtn.textContent = "⏳ Working…";
+    try {
+      await tool.run(state.files, ui);
+      toast("Done! Your download should start shortly ✨");
+    } catch (e) {
+      console.error(e);
+      showErr(e.message || "Something went wrong while processing. Please try a different file.");
+      pg.classList.remove("show");
+    } finally {
+      runBtn.disabled = false;
+      runBtn.innerHTML = "▶ " + (tool.accept ? "Process files" : "Create PDF");
+    }
+  };
+}
+
+function setMeta(name, content){
+  let m = document.querySelector('meta[name="'+name+'"]');
+  if (!m){ m = document.createElement("meta"); m.name = name; document.head.appendChild(m); }
+  m.content = content;
+}
+
+/* ================= Homepage ================= */
+function cardHTML(t){
+  return `<a class="card" href="#/${t.id}" style="text-decoration:none;color:inherit">
+    ${t.tag ? '<span class="tag">'+t.tag+'</span>' : ''}
+    <div class="icon">${t.icon}</div><h3>${esc(t.name)}</h3><p>${esc(t.short)}</p><span class="go">Use tool — it's free →</span></a>`;
+}
+
+function renderHome(mount){
+  document.title = "PinkFile Tools — Free PDF & Image Tools Online | No Registration";
+  setMeta("description", "Free online PDF & Image tools: JPG to PDF, PDF to JPG, Merge PDF, Compress Image, Resize Image, Image to PDF, A4 PDF Creator, Image Format Converter. No registration required.");
+  const popular = TOOLS.filter(t => t.popular);
+  const pdfTools = TOOLS.filter(t => t.cat === "pdf");
+  const imgTools = TOOLS.filter(t => t.cat === "image");
+  mount.innerHTML = `
+  <div class="hero container">
+    <span class="pill">🔒 100% Free · No Registration · No Uploads</span>
+    <h1>Create. <span class="grad">Convert.</span> Resize.<br><span class="grad">Done.</span></h1>
+    <p class="sub">Free PDF & Image Tools — <strong>No Registration</strong>. Everything runs privately in your browser on Android, iPhone and desktop. Your files never leave your device.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#/jpg-to-pdf">🖼️ Start Converting</a>
+      <a class="btn btn-ghost" href="#/" onclick="goSection(event,'popular')">Explore Tools ↓</a>
+    </div>
+    <div class="badges">
+      <span class="badge">⚡ Instant results</span>
+      <span class="badge">🚫 No watermarks</span>
+      <span class="badge">📱 Mobile friendly</span>
+      <span class="badge">♾️ Unlimited use</span>
+    </div>
+  </div>
+
+  <div class="container"><div class="ad-slot">Advertisement — 728×90 Leaderboard</div></div>
+
+  <section class="container" id="popular">
+    <h2 class="sec-title">🔥 Popular Tools</h2>
+    <p class="sec-sub">Loved by thousands of users every day — pick one and finish in seconds.</p>
+    <div class="grid">${popular.map(cardHTML).join("")}</div>
+  </section>
+
+  <section class="container" id="pdf-tools">
+    <h2 class="sec-title">📄 PDF Tools</h2>
+    <p class="sec-sub">Create, convert and combine PDFs — free, fast and private.</p>
+    <div class="grid">${pdfTools.map(cardHTML).join("")}</div>
+  </section>
+
+  <div class="container"><div class="ad-slot">Advertisement — Responsive Display</div></div>
+
+  <section class="container" id="img-tools">
+    <h2 class="sec-title">🖼️ Image Tools</h2>
+    <p class="sec-sub">Compress, resize and convert images without losing quality.</p>
+    <div class="grid">${imgTools.map(cardHTML).join("")}</div>
+  </section>
+
+  <section class="container" id="how">
+    <h2 class="sec-title">⚙️ How It Works</h2>
+    <p class="sec-sub">Three steps. Zero signup. Zero waiting.</p>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><h3>Drop your files</h3><p>Drag & drop, or tap to browse from your phone gallery, camera or computer.</p></div>
+      <div class="step"><div class="num">2</div><h3>We process instantly</h3><p>Magic happens on <em>your</em> device using your browser — nothing is uploaded anywhere.</p></div>
+      <div class="step"><div class="num">3</div><h3>Download & done</h3><p>Grab your PDF or image in one tap. No watermarks, no email gates, no limits.</p></div>
+    </div>
+  </section>
+
+  <div class="container"><div class="ad-slot">Advertisement — In-Feed 300×250</div></div>
+
+  <section class="container" id="faq">
+    <h2 class="sec-title">❓ Frequently Asked Questions</h2>
+    <p class="sec-sub">Everything you need to know before your first file.</p>
+    <div class="faq">
+      <details open><summary>Is PinkFile Tools really 100% free?</summary><p>Yes — every tool is free with unlimited use, no watermarks and no premium paywall. We keep the lights on with the ad spaces you see on the page.</p></details>
+      <details><summary>Do I need an account, email or registration?</summary><p>No. There is no registration, no login and no email required. Open a tool, drop your file, download the result. That's it.</p></details>
+      <details><summary>Are my files uploaded to a server?</summary><p><strong>Never.</strong> All processing happens locally in your browser using the Canvas API, pdf-lib and PDF.js. You can even disconnect from the internet after the page loads and everything still works.</p></details>
+      <details><summary>Does it work on Android and iPhone?</summary><p>Absolutely. The site is mobile-first — tap any upload box to pick files from your gallery or camera. It also works great on desktop Chrome, Edge, Firefox and Safari.</p></details>
+      <details><summary>Why did my HEIC or RAW photo fail?</summary><p>Some camera formats (HEIC, RAW, TIFF) can't be decoded by browsers directly. Convert them to JPG or PNG first (your phone's gallery can usually do this), then use our tools.</p></details>
+      <details><summary>Is there a file size limit?</summary><p>No hard limit — since nothing is uploaded, the only limit is your device's memory. Files up to ~100 MB typically work fine on modern phones.</p></details>
+    </div>
+  </section>
+
+  <section class="container" id="privacy">
+    <h2 class="sec-title">🔒 Privacy Policy</h2>
+    <p class="sec-sub">Last updated: September 2026</p>
+    <div class="privacy">
+      <p>This Privacy Policy explains how PinkFile Tools ("we", "us") handles information when you visit pinkfile.tools. We aim to collect only the information needed to operate, secure, measure, and improve the site.</p>
+
+      <p><strong>Files you process with our tools.</strong> PinkFile Tools uses client-side technologies (JavaScript, WebAssembly, Canvas API) to process your PDFs and images directly in your browser. We do not intentionally transmit or store your files on our own servers — everything happens on your device, and closing or refreshing the page removes the in-memory data.</p>
+
+      <p><strong>Cookies and similar technologies.</strong> PinkFile Tools may use cookies and similar technologies through analytics and advertising services. These technologies may be used to measure site usage, improve performance, prevent abuse, and, when advertising is enabled, deliver and measure advertisements.</p>
+
+      <p><strong>Google Analytics.</strong> We use Google Analytics to understand aggregate website usage, such as which pages are visited and how visitors interact with the site. Google may process technical information associated with visits in accordance with its own policies and terms.</p>
+
+      <p><strong>Google AdSense and advertising.</strong> PinkFile Tools may use Google AdSense to display advertisements. If advertising is enabled, Google and its partners may use cookies, web beacons, IP addresses, or similar identifiers to serve, measure, and personalize advertising as permitted by applicable law and your choices.</p>
+
+      <p>Third parties, including Google, may place and read cookies on visitors' browsers or use web beacons or IP addresses as a result of ad serving on this website. You can learn more about how Google uses data when you use our partners' sites or apps at <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites or apps that use our services</a>.</p>
+
+      <p>You can manage personalized advertising through <a href="https://adssettings.google.com/" target="_blank" rel="noopener">Google Ads Settings</a>.</p>
+
+      <p><strong>Your choices and privacy rights.</strong> You can control cookies through your browser settings. Depending on your location, you may also have additional privacy rights under applicable law. Where required, we will provide appropriate consent and privacy choices before using technologies that require consent.</p>
+
+      <p><strong>Your rights if you are in the European Economic Area, the UK, or Switzerland.</strong> If you are located in the EEA, the UK, or Switzerland, you have rights under the General Data Protection Regulation (GDPR) and equivalent laws, including the right to access, correct, delete, or restrict the use of your personal data, the right to data portability, and the right to withdraw consent at any time where processing is based on consent. Where cookies or similar technologies require your consent (for example, for personalized advertising), we will ask for that consent before they are set, and you can change or withdraw your choice at any time through the cookie settings on this site or your browser settings. To exercise any of these rights, contact us using the details below.</p>
+
+      <p><strong>Legal basis for processing.</strong> Where applicable law requires it, we rely on your consent for non-essential cookies and personalized advertising, and on our legitimate interest in operating, securing, and improving the site for essential functionality and aggregated analytics.</p>
+
+      <p><strong>Children's privacy.</strong> PinkFile Tools is not directed at children under 13, and we do not knowingly collect personal information from children.</p>
+
+      <p><strong>Changes to this policy.</strong> We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated revision date.</p>
+
+      <p><strong>Contact us.</strong> Questions about this policy? Reach out via our <a href="mailto:q80yooon@gmail.com">contact email</a>.</p>
+    </div>
+  </section>
+
+  <section class="container" id="about">
+    <div class="privacy">
+      <h2 class="sec-title" style="margin-bottom:12px">🌸 About Us</h2>
+      <p>PinkFile Tools is a simple online collection of PDF and image utilities designed to help you create, convert, resize and manage files directly in your browser.</p>
+      <p>Our goal is to keep everyday file tasks easy, fast and accessible without unnecessary registration or complicated steps.</p>
+    </div>
+  </section>
+
+  <section class="container" id="contact">
+    <div class="privacy">
+      <h2 class="sec-title" style="margin-bottom:12px">✉️ Contact</h2>
+      <p>For questions, feedback or suggestions about PinkFile Tools, please contact the site owner through the contact method provided on the official website.</p>
+    </div>
+  </section>
+
+  <div class="container" style="text-align:center;padding-bottom:20px">
+    <a class="btn btn-primary" href="#/jpg-to-pdf">🚀 Try a tool now — free forever</a>
+  </div>`;
+}
+
+/* ================= Router ================= */
+const app = $("#app");
+function route(){
+  const h = (location.hash || "#/").replace(/^#\//, "");
+  window.scrollTo({ top: 0 });
+  const tool = TOOLS.find(t => t.id === h);
+  if (tool) initTool(tool, app); else renderHome(app);
+  $("#mobileMenu").classList.remove("open");
+}
+window.addEventListener("hashchange", route);
+
+function goSection(e, id){
+  e.preventDefault();
+  if (location.hash !== "#/" && location.hash !== ""){ location.hash = "#/"; setTimeout(()=>document.getElementById(id)?.scrollIntoView({behavior:"smooth"}), 80); }
+  else document.getElementById(id)?.scrollIntoView({ behavior:"smooth" });
+  $("#mobileMenu").classList.remove("open");
+}
+
+$("#burger").onclick = () => $("#mobileMenu").classList.toggle("open");
+
+route();
+</script>
+</body>
+</html>
