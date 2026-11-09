@@ -240,3 +240,95 @@ footer .copy{text-align:center;font-size:.78rem;border-top:1px solid rgba(255,25
 .tool-info-card .faq{max-width:none}
 .tool-info-card .faq details{box-shadow:none;border:1px solid var(--pink-100);background:var(--pink-50)}
 a:focus-visible,button:focus-visible,.dropzone:focus-visible,summary:focus-visible{outline:3px solid var(--pink-400);outline-offset:2px}
+
+
+/* ---------- Pink PDF Plus: calm navy + rose refresh ---------- */
+:root{
+  --pink-50:#fbf3f6; --pink-100:#f6e4eb; --pink-200:#edc7d5; --pink-300:#e4a4ba;
+  --pink-400:#df88a6; --pink-500:#d96c91; --pink-600:#c6537b; --pink-700:#a83d64;
+  --ink:#17243A; --ink-soft:#647084; --white:#ffffff;
+  --radius:20px;
+  --shadow:0 8px 28px rgba(23,36,58,.07);
+  --shadow-lg:0 14px 40px rgba(23,36,58,.11);
+}
+body{
+  color:var(--ink);
+  background:#F3F5F8;
+  background-attachment:scroll;
+}
+a{color:var(--pink-600)}
+header{
+  background:rgba(255,255,255,.94);
+  border-bottom:1px solid rgba(23,36,58,.08);
+}
+.logo{color:var(--ink)}
+.logo-badge{
+  background:linear-gradient(135deg,#D96C91,#C6537B);
+  box-shadow:0 4px 14px rgba(217,108,145,.22);
+}
+.nav-links a{color:var(--ink)}
+.burger{color:var(--ink)}
+.mobile-menu{border-bottom-color:#e7eaf0}
+.mobile-menu a{color:var(--ink);border-bottom-color:#edf0f4}
+.header-ticker{
+  background:linear-gradient(90deg,#17243A,#293b59,#D96C91,#293b59,#17243A);
+  box-shadow:0 3px 14px rgba(23,36,58,.12);
+}
+.hero .pill{color:var(--ink);box-shadow:var(--shadow)}
+.hero h1{color:var(--ink)}
+.hero h1 .grad{
+  background:linear-gradient(90deg,#17243A,#D96C91);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero p.sub,.sec-sub{color:var(--ink-soft)}
+.btn-primary{
+  background:linear-gradient(135deg,#D96C91,#C6537B);
+  box-shadow:0 8px 22px rgba(217,108,145,.24);
+}
+.btn-primary:hover{box-shadow:0 11px 28px rgba(217,108,145,.3)}
+.btn-ghost{color:var(--ink);box-shadow:var(--shadow)}
+.badge{border-color:#e5e9ef;color:var(--ink-soft)}
+.card,.step,.faq details{box-shadow:var(--shadow)}
+.card:hover{box-shadow:var(--shadow-lg)}
+.card .icon{background:linear-gradient(135deg,#fbf3f6,#f1dbe4)}
+.card .go,.tool-head .crumb a,.tool-info-card a,.faq details a{color:var(--pink-600)}
+.tag{background:linear-gradient(135deg,#D96C91,#A83D64)}
+.ad-slot{
+  border-color:rgba(217,108,145,.35);
+  background:rgba(255,255,255,.72);
+  color:var(--ink-soft);
+}
+.tool-info-card{
+  border-color:#e8ebf0;
+  box-shadow:var(--shadow);
+}
+.tool-card{box-shadow:var(--shadow-lg)}
+.dropzone{
+  border-color:#e4a4ba;
+  background:#fbf3f6;
+}
+.dropzone:hover,.dropzone.over{border-color:#D96C91;background:#f6e4eb}
+.opt select,.opt input[type=number],.opt input[type=range],.opt textarea{
+  border-color:#e5c5d2;color:var(--ink);
+}
+.opt select:focus,.opt input:focus,.opt textarea:focus{
+  border-color:#D96C91;box-shadow:0 0 0 3px rgba(217,108,145,.14);
+}
+.thumb{border-color:#f0dce4}
+.progress{background:#f3e5eb}
+.progress .bar{background:linear-gradient(90deg,#D96C91,#A83D64)}
+.result.show{
+  background:linear-gradient(135deg,#fbf3f6,#f6e4eb);
+  border-color:#edc7d5;
+}
+.btn-again{color:var(--pink-600);border-color:#e4a4ba}
+footer{
+  background:#17243A;color:#dce3ee;
+}
+footer a{color:#edb7c9}
+footer .copy{color:#b8c3d2}
+.toast{background:#17243A;box-shadow:var(--shadow-lg)}
+.tool-info-card code,.faq code{background:#fbf3f6}
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto}
+}
