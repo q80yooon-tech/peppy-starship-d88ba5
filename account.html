@@ -20,7 +20,8 @@
     .primary{width:100%;border:0;border-radius:999px;background:var(--navy);color:#fff;padding:14px 18px;font-size:1rem;font-weight:800;cursor:pointer;margin-top:20px}.primary:hover{background:#263b5b}.secondary{border:0;background:none;color:#9b4565;font-weight:700;cursor:pointer;padding:10px 0}
     .message{display:none;margin:16px 0 0;padding:12px 14px;border-radius:10px;line-height:1.5;font-size:.92rem}.message.show{display:block}.message.info{background:#eef5ff;color:#214d83}.message.error{background:#fff0f0;color:#a12b2b}.message.success{background:#edfaf3;color:#176b3a}
     .account-state{display:none}.account-state.show{display:block}.auth-forms.hide{display:none}.user-email{font-weight:700;overflow-wrap:anywhere}.small{font-size:.82rem;color:var(--muted);line-height:1.55;margin-top:16px}
-    @media(max-width:520px){main{margin:26px auto}.card{padding:23px 19px}header{padding:0 16px}}
+    .membership-panel{margin:24px 0 16px;border-top:1px solid var(--line);padding-top:18px}.membership-panel h2{font-size:1.15rem;margin:0 0 8px}.plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.plan-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}.plan-card h3{margin:0 0 8px;font-size:1.05rem}.price{font-size:1.15rem;font-weight:800;margin:8px 0;color:var(--navy)}.price span{display:block;font-size:.76rem;font-weight:500;color:var(--muted);margin-top:3px}.plan-button{margin-top:8px;padding:12px 10px}.plan-button:disabled{opacity:.6;cursor:wait}
+    @media(max-width:520px){main{margin:26px auto}.card{padding:23px 19px}header{padding:0 16px}.plans{grid-template-columns:1fr}}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script defer src="/account.js"></script>
@@ -53,6 +54,23 @@
       </div>
       <div id="accountState" class="account-state">
         <p>You are signed in as:</p><p id="userEmail" class="user-email"></p>
+        <section id="membershipPanel" class="membership-panel" aria-live="polite">
+          <h2>Your membership</h2>
+          <p id="membershipStatus" class="small">Checking your membership…</p>
+          <div id="planChoices" class="plans">
+            <article class="plan-card">
+              <h3>PLUS</h3><p class="price">$2.50 <span>/ month for first 3 months</span></p>
+              <p class="small">Then $5/month. Cancel according to PayPal subscription terms.</p>
+              <button class="primary plan-button" data-tier="plus" type="button">Choose PLUS</button>
+            </article>
+            <article class="plan-card">
+              <h3>PRO</h3><p class="price">$5.00 <span>/ month for first 3 months</span></p>
+              <p class="small">Then $10/month. Cancel according to PayPal subscription terms.</p>
+              <button class="primary plan-button" data-tier="pro" type="button">Choose PRO</button>
+            </article>
+          </div>
+          <p class="small">Payments are processed by PayPal. You will review and approve the subscription on PayPal before any charge. Free tools remain available without a paid membership.</p>
+        </section>
         <button id="signoutBtn" class="primary" type="button">Sign out</button>
       </div>
       <div id="message" class="message" role="status" aria-live="polite"></div>
