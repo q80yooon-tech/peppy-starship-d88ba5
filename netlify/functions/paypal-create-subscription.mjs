@@ -11,7 +11,6 @@ export const handler = async (event) => {
 
   try {
     const user = await supabaseUserFromRequest(event);
-
     if (!user?.id) {
       return json(401, { error: 'Please sign in first.' });
     }
@@ -23,15 +22,14 @@ export const handler = async (event) => {
       return json(400, { error: 'Invalid membership tier.' });
     }
 
-    const planId = required(
+    const configuredPlanId = required(
       tier === 'plus' ? 'PAYPAL_PLAN_PLUS' : 'PAYPAL_PLAN_PRO'
     ).trim();
 
     const token = await paypalAccessToken();
 
-    // Temporary diagnostic: retrieve the plan without creating a subscription.
-    const checkResponse = await fetch(
-      `${paypalBase()}/v1/billing/plans/${encodeURIComponent(planId)}`,
+    const response = await fetch(
+      `${paypalBase()}/v1/billing/plans?page_size=20&total_required=true`,
       {
         method: 'GET',
         headers: {
@@ -41,15 +39,34 @@ export const handler = async (event) => {
       }
     );
 
-    const plan = await checkResponse.json();
+    const data = await response.json();
 
-    return json(checkResponse.ok ? 200 : 502, {
+    if (!response.ok) {
+      return json(502, {
+        diagnostic: true,
+        list_check_ok: false,
+        status: response.status,
+        paypal_error: data,
+      });
+    }
+
+    const plans = (data.plans || []).map((plan) => ({
+      id: plan.id,
+      name: plan.name,
+      status: plan.status,
+    }));
+
+    return json(200, {
       diagnostic: true,
-      plan_check_ok: checkResponse.ok,
-      plan_check_status: checkResponse.status,
-      configured_plan_id_matches: plan.id === planId,
-      plan_status: plan.status || null,
-      paypal_error: checkResponse.ok ? null : plan,
+      list_check_ok: true,
+      selected_tier: tier,
+      configured_plan_id: configuredPlanId,
+      configured_plan_found: plans.some(
+        (plan) => plan.id === configuredPlanId
+      ),
+      plans,
+      total_items: data.total_items || null,
+      total_pages: data.total_pages || null,
     });
 
   } catch (error) {
