@@ -35,7 +35,6 @@ export const handler = async (event) => {
     const response = await fetch(
       `${paypalBase()}/v1/billing/subscriptions/${encodeURIComponent(subscriptionId)}`,
       {
-        method: 'GET',
         headers: {
           authorization: `Bearer ${token}`,
           accept: 'application/json',
@@ -53,31 +52,31 @@ export const handler = async (event) => {
       });
     }
 
-    if (subscription.custom_id !== user.id) {
-      return json(403, {
-        error: 'This subscription does not belong to the signed-in account.',
-      });
-    }
+    const paypalCustomId = String(subscription.custom_id || '');
+    const customIdMatches = paypalCustomId === user.id;
 
     const plusPlan = required('PAYPAL_PLAN_PLUS').trim();
     const proPlan = required('PAYPAL_PLAN_PRO').trim();
-
     const actualPlanId = String(subscription.plan_id || '').trim();
 
     const tier =
-      actualPlanId === plusPlan
-        ? 'plus'
-        : actualPlanId === proPlan
-          ? 'pro'
-          : null;
+      actualPlanId === plusPlan ? 'plus' :
+      actualPlanId === proPlan ? 'pro' : null;
 
-    if (!tier) {
+    const diagnostic = {
+      diagnostic: true,
+      subscription_found: true,
+      custom_id_present: Boolean(paypalCustomId),
+      custom_id_matches_signed_in_user: customIdMatches,
+      paypal_status: subscription.status || 'UNKNOWN',
+      plan_matches: Boolean(tier),
+      matched_tier: tier,
+    };
+
+    if (!customIdMatches || !tier) {
       return json(403, {
-        error: 'PayPal plan does not match configured plans.',
-        diagnostic: true,
-        actual_plan_id: actualPlanId,
-        plus_plan_matches: actualPlanId === plusPlan,
-        pro_plan_matches: actualPlanId === proPlan,
+        error: 'PayPal subscription verification mismatch.',
+        ...diagnostic,
       });
     }
 
@@ -90,8 +89,8 @@ export const handler = async (event) => {
       APPROVED: 'pending',
     };
 
-    const paypalStatus = String(subscription.status || 'UNKNOWN');
-    const status = statusMap[paypalStatus] || 'pending';
+    const status =
+      statusMap[subscription.status] || 'pending';
 
     const update = await supabaseAdmin(
       `membership_subscriptions?paypal_subscription_id=eq.${encodeURIComponent(subscriptionId)}&user_id=eq.${encodeURIComponent(user.id)}`,
@@ -113,20 +112,14 @@ export const handler = async (event) => {
     if (!Array.isArray(update) || update.length === 0) {
       return json(404, {
         error: 'Subscription record was not found in Supabase.',
-        diagnostic: true,
-        paypal_status: paypalStatus,
-        subscription_id: subscriptionId,
+        ...diagnostic,
       });
     }
 
     return json(200, {
       success: true,
-      diagnostic: true,
-      subscription_id: subscriptionId,
-      tier,
+      ...diagnostic,
       status,
-      paypal_status: paypalStatus,
-      payer_email: subscription.subscriber?.email_address || null,
       database_updated: true,
     });
 
