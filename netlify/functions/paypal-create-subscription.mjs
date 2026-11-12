@@ -1,7 +1,7 @@
 
 import {
   json, required, paypalBase, paypalAccessToken,
-  supabaseUserFromRequest,
+  supabaseUserFromRequest, supabaseAdmin,
 } from './_shared.mjs';
 
 export const handler = async (event) => {
@@ -22,20 +22,32 @@ export const handler = async (event) => {
       return json(400, { error: 'Invalid membership tier.' });
     }
 
-    const configuredPlanId = required(
+    const planId = required(
       tier === 'plus' ? 'PAYPAL_PLAN_PLUS' : 'PAYPAL_PLAN_PRO'
     ).trim();
 
     const token = await paypalAccessToken();
+    const siteUrl = required('SITE_URL').replace(/\/$/, '');
 
     const response = await fetch(
-      `${paypalBase()}/v1/billing/plans?page_size=20&total_required=true`,
+      `${paypalBase()}/v1/billing/subscriptions`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           authorization: `Bearer ${token}`,
-          accept: 'application/json',
+          'content-type': 'application/json',
+          prefer: 'return=representation',
         },
+        body: JSON.stringify({
+          plan_id: planId,
+          custom_id: user.id,
+          application_context: {
+            brand_name: 'Pink PDF Plus',
+            user_action: 'SUBSCRIBE_NOW',
+            return_url: `${siteUrl}/subscription-success.html`,
+            cancel_url: `${siteUrl}/account.html?subscription=cancelled`,
+          },
+        }),
       }
     );
 
@@ -43,30 +55,39 @@ export const handler = async (event) => {
 
     if (!response.ok) {
       return json(502, {
-        diagnostic: true,
-        list_check_ok: false,
-        status: response.status,
-        paypal_error: data,
+        error: 'PayPal could not create the subscription.',
+        details: data,
       });
     }
 
-    const plans = (data.plans || []).map((plan) => ({
-      id: plan.id,
-      name: plan.name,
-      status: plan.status,
-    }));
+    const approval = (data.links || []).find(
+      (link) => link.rel === 'approve'
+    );
+
+    if (!approval?.href) {
+      return json(502, {
+        error: 'PayPal did not return an approval link.',
+        subscription_id: data.id || null,
+      });
+    }
+
+    await supabaseAdmin('membership_subscriptions', {
+      method: 'POST',
+      headers: {
+        Prefer: 'resolution=merge-duplicates,return=minimal',
+      },
+      body: JSON.stringify({
+        user_id: user.id,
+        paypal_subscription_id: data.id,
+        paypal_plan_id: planId,
+        tier,
+        status: 'pending',
+      }),
+    });
 
     return json(200, {
-      diagnostic: true,
-      list_check_ok: true,
-      selected_tier: tier,
-      configured_plan_id: configuredPlanId,
-      configured_plan_found: plans.some(
-        (plan) => plan.id === configuredPlanId
-      ),
-      plans,
-      total_items: data.total_items || null,
-      total_pages: data.total_pages || null,
+      approval_url: approval.href,
+      subscription_id: data.id,
     });
 
   } catch (error) {
