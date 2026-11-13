@@ -33,7 +33,10 @@ function paypalBase() {
 async function paypalAccessToken() {
   const client = required("PAYPAL_CLIENT_ID");
   const secret = required("PAYPAL_CLIENT_SECRET");
-  const credentials = Buffer.from(`${client}:${secret}`).toString("base64");
+
+  const credentials = Buffer.from(
+    `${client}:${secret}`
+  ).toString("base64");
 
   const response = await fetch(
     `${paypalBase()}/v1/oauth2/token`,
@@ -50,7 +53,9 @@ async function paypalAccessToken() {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(`PayPal token request failed (${response.status})`);
+    throw new Error(
+      `PayPal token request failed (${response.status})`
+    );
   }
 
   return data.access_token;
@@ -62,7 +67,9 @@ async function supabaseUserFromRequest(event) {
     event.headers.Authorization ||
     "";
 
-  if (!auth.startsWith("Bearer ")) return null;
+  if (!auth.startsWith("Bearer ")) {
+    return null;
+  }
 
   const token = auth.slice(7);
 
@@ -76,21 +83,22 @@ async function supabaseUserFromRequest(event) {
     }
   );
 
-  if (!response.ok) return null;
+  if (!response.ok) {
+    return null;
+  }
 
   return response.json();
 }
 
 async function supabaseAdmin(path, options = {}) {
-  const serviceRoleKey = required("SUPABASE_SECRET_KEY");
+  const secretKey = required("SUPABASE_SECRET_KEY");
 
   const response = await fetch(
     `${required("SUPABASE_URL")}/rest/v1/${path}`,
     {
       ...options,
       headers: {
-        apikey: serviceRoleKey,
-        authorization: `Bearer ${serviceRoleKey}`,
+        apikey: secretKey,
         "content-type": "application/json",
         ...(options.headers || {}),
       },
