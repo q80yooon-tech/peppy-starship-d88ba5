@@ -23,6 +23,7 @@
     .membership-panel{margin:24px 0 16px;border-top:1px solid var(--line);padding-top:18px}.membership-panel h2{font-size:1.15rem;margin:0 0 8px}.plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.plan-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}.plan-card h3{margin:0 0 8px;font-size:1.05rem}.price{font-size:1.15rem;font-weight:800;margin:8px 0;color:var(--navy)}.price span{display:block;font-size:.76rem;font-weight:500;color:var(--muted);margin-top:3px}.plan-button{margin-top:8px;padding:12px 10px}.plan-button:disabled{opacity:.6;cursor:wait}
     .free-plan-link{display:block;width:100%;text-align:center;text-decoration:none;border:2px solid var(--navy);border-radius:999px;background:#fff;color:var(--navy);padding:13px 18px;font-weight:800;margin:14px 0;transition:background .2s,color .2s}
     .free-plan-link:hover{background:var(--navy);color:#fff}
+    .paypal-brand{color:#003087;font-weight:800}
     @media(max-width:520px){main{margin:26px auto}.card{padding:23px 19px}header{padding:0 16px}.plans{grid-template-columns:1fr}}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -72,7 +73,7 @@
             </article>
           </div>
           <a class="free-plan-link" href="/" aria-label="Continue using the free tools">Continue with Free Plan</a>
-          <p class="small">Payments are processed by PayPal. You will review and approve the subscription on PayPal before any charge. Free tools remain available without a paid membership.</p>
+          <p class="small">Payments are processed by <span class="paypal-brand">PayPal</span>. You will review and approve the subscription on <span class="paypal-brand">PayPal</span> before any charge. Free tools remain available without a paid membership.</p>
         </section>
         <button id="signoutBtn" class="primary" type="button">Sign out</button>
       </div>
