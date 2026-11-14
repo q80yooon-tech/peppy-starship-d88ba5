@@ -40,30 +40,45 @@
     $('membershipStatus').textContent = 'Checking your membership…';
 
     try {
-      const { data, error } = await client
+      const { data: rows, error } = await client
         .from('membership_subscriptions')
-        .select('tier,status,paypal_subscription_id,updated_at')
+        .select('tier,status,paypal_subscription_id,created_at,updated_at')
         .eq('user_id', activeUser.id)
         .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .limit(50);
 
       if (error) throw error;
 
+      const records = Array.isArray(rows) ? rows : [];
+      const activeRecord = records.find((row) =>
+        String(row.status || '').toLowerCase() === 'active' &&
+        ['plus', 'pro'].includes(String(row.tier || '').toLowerCase())
+      );
+      const data = activeRecord || records[0] || null;
+      const statusEl = $('membershipStatus');
+      const planChoices = $('planChoices');
+      const freePlanLink = $('freePlanLink');
+
       if (!data) {
-        $('membershipStatus').textContent =
-          'No paid membership yet. Choose PLUS or PRO below.';
-        $('planChoices').hidden = false;
+        statusEl.textContent = 'FREE PLAN — No paid membership yet.';
+        statusEl.className = 'free';
+        planChoices.hidden = false;
+        freePlanLink.textContent = 'Continue with Free Plan';
         return;
       }
 
       const status = String(data.status || 'pending').toLowerCase();
       const tier = String(data.tier || '').toUpperCase();
+      const isActive = status === 'active' && ['PLUS', 'PRO'].includes(tier);
 
-      $('membershipStatus').textContent =
-        `${tier} membership status: ${status.replace('_', ' ')}.`;
+      statusEl.textContent = isActive
+        ? `${tier} MEMBERSHIP ACTIVE`
+        : `${tier || 'PAID'} membership status: ${status.replace('_', ' ')}.`;
+      statusEl.className = isActive ? 'active' : 'inactive';
 
-      $('planChoices').hidden = status === 'active';
+      // An active paid member should not be offered another paid checkout.
+      planChoices.hidden = isActive;
+      freePlanLink.textContent = isActive ? 'Continue to Tools' : 'Continue with Free Plan';
     } catch (error) {
       $('membershipStatus').textContent =
         'Could not load membership status. Please refresh and try again.';

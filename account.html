@@ -20,7 +20,13 @@
     .primary{width:100%;border:0;border-radius:999px;background:var(--navy);color:#fff;padding:14px 18px;font-size:1rem;font-weight:800;cursor:pointer;margin-top:20px}.primary:hover{background:#263b5b}.secondary{border:0;background:none;color:#9b4565;font-weight:700;cursor:pointer;padding:10px 0}
     .message{display:none;margin:16px 0 0;padding:12px 14px;border-radius:10px;line-height:1.5;font-size:.92rem}.message.show{display:block}.message.info{background:#eef5ff;color:#214d83}.message.error{background:#fff0f0;color:#a12b2b}.message.success{background:#edfaf3;color:#176b3a}
     .account-state{display:none}.account-state.show{display:block}.auth-forms.hide{display:none}.user-email{font-weight:700;overflow-wrap:anywhere}.small{font-size:.82rem;color:var(--muted);line-height:1.55;margin-top:16px}
-    .membership-panel{margin:24px 0 16px;border-top:1px solid var(--line);padding-top:18px}.membership-panel h2{font-size:1.15rem;margin:0 0 8px}.plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.plan-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}.plan-card h3{margin:0 0 8px;font-size:1.05rem}.price{font-size:1.15rem;font-weight:800;margin:8px 0;color:var(--navy)}.price span{display:block;font-size:.76rem;font-weight:500;color:var(--muted);margin-top:3px}.plan-button{margin-top:8px;padding:12px 10px}.plan-button:disabled{opacity:.6;cursor:wait}
+    .membership-panel{margin:24px 0 16px;border-top:1px solid var(--line);padding-top:18px}.membership-panel h2{font-size:1.15rem;margin:0 0 8px}
+    #membershipStatus{display:block;margin:12px 0 16px;padding:13px 15px;border:1px solid #dce5ef;border-radius:12px;background:#f5f8fc;color:var(--navy);font-size:.96rem;line-height:1.45;font-weight:800}
+    #membershipStatus.active{background:#eaf7f0;border-color:#b8e2ca;color:#176b45;font-size:1.04rem;font-weight:900}
+    #membershipStatus.free{background:#f3f6fb;border-color:#dce5ef;color:#33445d}
+    #membershipStatus.inactive{background:#fff7e9;border-color:#f2dfb8;color:#875b12}
+    .plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+    .plans[hidden]{display:none!important}.plan-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}.plan-card h3{margin:0 0 8px;font-size:1.05rem}.price{font-size:1.15rem;font-weight:800;margin:8px 0;color:var(--navy)}.price span{display:block;font-size:.76rem;font-weight:500;color:var(--muted);margin-top:3px}.plan-button{margin-top:8px;padding:12px 10px}.plan-button:disabled{opacity:.6;cursor:wait}
     .free-plan-link{display:block;width:100%;text-align:center;text-decoration:none;border:2px solid var(--navy);border-radius:999px;background:#fff;color:var(--navy);padding:13px 18px;font-weight:800;margin:14px 0;transition:background .2s,color .2s}
     .free-plan-link:hover{background:var(--navy);color:#fff}
     .paypal-brand{color:#003087;font-weight:800}
