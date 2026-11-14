@@ -1,0 +1,112 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cancel Pending Test Subscription</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f5f8;
+      color: #17243a;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    main {
+      background: white;
+      padding: 28px;
+      border-radius: 16px;
+      width: min(90%, 440px);
+      box-shadow: 0 8px 30px #0001;
+    }
+    button {
+      background: #17243a;
+      color: white;
+      border: 0;
+      padding: 14px 22px;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .5; }
+    #result { line-height: 1.6; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+<main>
+  <h2>Cancel old PLUS test subscription</h2>
+  <p>PayPal Sandbox test only.</p>
+  <p>Subscription: <strong>I-YPJ2FUX3AL9U</strong></p>
+  <button id="cancelBtn">Cancel old test subscription</button>
+  <p id="result">Waiting for your action.</p>
+</main>
+
+<script>
+(async () => {
+  const result = document.getElementById('result');
+  const button = document.getElementById('cancelBtn');
+
+  try {
+    const cfgResponse = await fetch(
+      '/.netlify/functions/public-config',
+      { cache: 'no-store' }
+    );
+    if (!cfgResponse.ok) throw new Error('Account service unavailable.');
+
+    const cfg = await cfgResponse.json();
+    const client = window.supabase.createClient(
+      cfg.url,
+      cfg.publishableKey
+    );
+
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      result.textContent = 'Checking and cancelling in PayPal Sandbox…';
+
+      try {
+        const { data: { session } } = await client.auth.getSession();
+
+        if (!session?.access_token) {
+          throw new Error('Please sign in to your Pink PDF Plus account first.');
+        }
+
+        const response = await fetch(
+          '/.netlify/functions/paypal-cancel-subscription',
+          {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              authorization: `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({
+              subscription_id: 'I-YPJ2FUX3AL9U'
+            })
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Cancellation failed.');
+        }
+
+        result.textContent =
+          'Success: old test subscription cancelled. Status: ' + data.status;
+        button.textContent = 'Cancelled';
+      } catch (error) {
+        result.textContent = error.message;
+        button.disabled = false;
+      }
+    });
+  } catch (error) {
+    result.textContent = error.message;
+    button.disabled = true;
+  }
+})();
+</script>
+</body>
+</html>

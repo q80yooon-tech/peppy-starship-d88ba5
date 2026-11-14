@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#17243A">
+  <title>Account — Pink PDF Plus</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+  <style>
+    :root{--navy:#17243A;--rose:#D96C91;--muted:#667085;--line:#e5e9ef;--bg:#F3F5F8}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Segoe UI,system-ui,Arial,sans-serif;color:var(--navy);min-height:100vh}
+    header{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(22px,calc((100% - 1080px)/2));gap:16px}
+    .brand{font-weight:800;font-size:1.12rem;color:var(--navy);text-decoration:none}.brand span{color:var(--rose)}header a.back{color:var(--navy);text-decoration:none;font-weight:600}
+    main{width:min(100% - 28px,460px);margin:54px auto}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:0 12px 36px rgba(23,36,58,.07)}
+    h1{font-size:1.7rem;margin:0 0 8px} .intro{color:var(--muted);margin:0 0 24px;line-height:1.6}
+    .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#f1f3f6;padding:5px;border-radius:12px;margin-bottom:22px}
+    .tabs button{border:0;border-radius:9px;padding:11px;background:transparent;color:var(--muted);font-weight:700;cursor:pointer}.tabs button.active{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(23,36,58,.08)}
+    label{display:block;font-size:.9rem;font-weight:700;margin:14px 0 7px}input{width:100%;padding:13px 14px;border:1px solid #d5dbe4;border-radius:10px;font:inherit;outline:none}input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(217,108,145,.13)}
+    .primary{width:100%;border:0;border-radius:999px;background:var(--navy);color:#fff;padding:14px 18px;font-size:1rem;font-weight:800;cursor:pointer;margin-top:20px}.primary:hover{background:#263b5b}.secondary{border:0;background:none;color:#9b4565;font-weight:700;cursor:pointer;padding:10px 0}
+    .message{display:none;margin:16px 0 0;padding:12px 14px;border-radius:10px;line-height:1.5;font-size:.92rem}.message.show{display:block}.message.info{background:#eef5ff;color:#214d83}.message.error{background:#fff0f0;color:#a12b2b}.message.success{background:#edfaf3;color:#176b3a}
+    .account-state{display:none}.account-state.show{display:block}.auth-forms.hide{display:none}.user-email{font-weight:700;overflow-wrap:anywhere}.small{font-size:.82rem;color:var(--muted);line-height:1.55;margin-top:16px}
+    .membership-panel{margin:24px 0 16px;border-top:1px solid var(--line);padding-top:18px}.membership-panel h2{font-size:1.15rem;margin:0 0 8px}.plans{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.plan-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}.plan-card h3{margin:0 0 8px;font-size:1.05rem}.price{font-size:1.15rem;font-weight:800;margin:8px 0;color:var(--navy)}.price span{display:block;font-size:.76rem;font-weight:500;color:var(--muted);margin-top:3px}.plan-button{margin-top:8px;padding:12px 10px}.plan-button:disabled{opacity:.6;cursor:wait}
+    @media(max-width:520px){main{margin:26px auto}.card{padding:23px 19px}header{padding:0 16px}.plans{grid-template-columns:1fr}}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="/account.js"></script>
+</head>
+<body>
+  <header><a class="brand" href="/">Pink PDF <span>Plus</span></a><a class="back" href="/">← Back to tools</a></header>
+  <main>
+    <section class="card">
+      <h1>Your Pink PDF Plus account</h1>
+      <p class="intro">Create an account or sign in to manage your PLUS or PRO membership. The free PDF and image tools remain available without registration.</p>
+      <div id="authForms" class="auth-forms">
+        <div class="tabs" role="tablist" aria-label="Account access">
+          <button type="button" id="tabSignin" class="active">Sign in</button>
+          <button type="button" id="tabSignup">Create account</button>
+        </div>
+        <form id="authForm">
+          <label for="email">Email address</label>
+          <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
+          <label for="password">Password</label>
+          <input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters">
+          <button id="submitBtn" class="primary" type="submit">Sign in</button>
+        </form>
+        <form id="recoveryForm" hidden>
+          <label for="newPassword">New password</label>
+          <input id="newPassword" type="password" autocomplete="new-password" minlength="8" required placeholder="At least 8 characters">
+          <button class="primary" type="submit">Update password</button>
+        </form>
+        <button id="forgotBtn" class="secondary" type="button">Forgot password?</button>
+        <p class="small">By creating an account, you agree to use this service responsibly. We will send a confirmation email before activating your account.</p>
+      </div>
+      <div id="accountState" class="account-state">
+        <p>You are signed in as:</p><p id="userEmail" class="user-email"></p>
+        <section id="membershipPanel" class="membership-panel" aria-live="polite">
+          <h2>Your membership</h2>
+          <p id="membershipStatus" class="small">Checking your membership…</p>
+          <div id="planChoices" class="plans">
+            <article class="plan-card">
+              <h3>PLUS</h3><p class="price">$2.50 <span>/ month for first 3 months</span></p>
+              <p class="small">Then $5/month. Cancel according to PayPal subscription terms.</p>
+              <button class="primary plan-button" data-tier="plus" type="button">Choose PLUS</button>
+            </article>
+            <article class="plan-card">
+              <h3>PRO</h3><p class="price">$5.00 <span>/ month for first 3 months</span></p>
+              <p class="small">Then $10/month. Cancel according to PayPal subscription terms.</p>
+              <button class="primary plan-button" data-tier="pro" type="button">Choose PRO</button>
+            </article>
+          </div>
+          <p class="small">Payments are processed by PayPal. You will review and approve the subscription on PayPal before any charge. Free tools remain available without a paid membership.</p>
+        </section>
+        <button id="signoutBtn" class="primary" type="button">Sign out</button>
+      </div>
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+    </section>
+  </main>
+</body>
+</html>
