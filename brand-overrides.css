@@ -1,0 +1,83 @@
+/* Pink PDF Plus — calm professional rose refresh.
+   Presentation-only overrides: no component behavior or application logic. */
+:root {
+  --brand-navy: #17243a;
+  --brand-rose: #d96c91;
+  --brand-rose-dark: #b94e75;
+  --brand-muted: #657286;
+  --brand-border: #e7eaf0;
+  --brand-surface: #ffffff;
+  --brand-canvas: #f4f6f9;
+  --brand-shadow: 0 10px 30px rgba(23, 36, 58, .075);
+  --brand-shadow-hover: 0 16px 38px rgba(23, 36, 58, .12);
+}
+html { scroll-behavior: smooth; }
+body {
+  color: var(--brand-navy);
+  background: var(--brand-canvas);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a { color: var(--brand-rose-dark); }
+a:hover { color: var(--brand-navy); }
+:focus-visible { outline: 3px solid rgba(217,108,145,.45); outline-offset: 3px; }
+header {
+  background: rgba(255,255,255,.96);
+  border-bottom: 1px solid var(--brand-border);
+  box-shadow: 0 3px 14px rgba(23,36,58,.035);
+}
+.header-ticker {
+  background: linear-gradient(90deg, #17243a 0%, #34435d 48%, #bd6686 100%);
+  box-shadow: none;
+}
+.logo, .nav-links a, .burger { color: var(--brand-navy); }
+.logo-badge { box-shadow: 0 4px 12px rgba(217,108,145,.2); }
+.hero .pill, .badge, .hero .badge {
+  border: 1px solid var(--brand-border);
+  box-shadow: 0 5px 16px rgba(23,36,58,.045);
+}
+.hero h1 { color: var(--brand-navy); letter-spacing: -.035em; }
+.hero h1 .grad { background: linear-gradient(100deg, #293b59, #d96c91); -webkit-background-clip: text; background-clip: text; }
+.hero p.sub, .sec-sub, .card p, .step p { color: var(--brand-muted); }
+.btn, button { transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease; }
+.btn-primary, .primary, .btn-run {
+  background: linear-gradient(120deg, #d96c91, #bd557d);
+  box-shadow: 0 7px 18px rgba(217,108,145,.2);
+}
+.btn-primary:hover, .primary:hover, .btn-run:hover { box-shadow: 0 10px 24px rgba(217,108,145,.27); }
+.btn-ghost { color: var(--brand-navy); border: 1px solid var(--brand-border); }
+.card, .step, .tool-info-card, .privacy, .tool-card, .plan-card {
+  border: 1px solid var(--brand-border);
+  box-shadow: var(--brand-shadow);
+}
+.card:hover, .tool-card:hover { box-shadow: var(--brand-shadow-hover); }
+.card .icon { background: linear-gradient(135deg, #fbf2f6, #f1dce5); }
+.card .go, .tool-info-card a, .faq details a { color: var(--brand-rose-dark); }
+.tag { background: linear-gradient(120deg, #d96c91, #b94e75); }
+.dropzone {
+  background: #fcf7f9;
+  border-color: #e4b4c5;
+  border-radius: 18px;
+}
+.dropzone:hover, .dropzone.over { background: #f9edf2; border-color: var(--brand-rose); }
+input, select, textarea, .opt select, .opt input[type="number"], .opt textarea {
+  border-color: #dce1e9;
+  border-radius: 11px;
+}
+input:focus, select:focus, textarea:focus, .opt select:focus, .opt input:focus, .opt textarea:focus {
+  border-color: var(--brand-rose);
+  box-shadow: 0 0 0 3px rgba(217,108,145,.13);
+}
+.faq details { border: 1px solid var(--brand-border); box-shadow: 0 5px 18px rgba(23,36,58,.045); }
+footer { background: #17243a; }
+footer a { color: #edb7c9; }
+@media (max-width: 640px) {
+  .hero { padding-top: 38px; }
+  .card, .step, .tool-info-card { border-radius: 17px; }
+  .container { padding-left: 16px; padding-right: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
