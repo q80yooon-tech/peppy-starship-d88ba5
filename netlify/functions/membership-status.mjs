@@ -17,14 +17,24 @@ export const handler = async (event) => {
     if (!user?.id) return json(401, { error: 'Could not identify the signed-in user.' });
 
     const rows = await supabaseAdmin(
-      `membership_subscriptions?user_id=eq.${encodeURIComponent(user.id)}&select=tier,status,created_at&order=created_at.desc&limit=1`
+      `membership_subscriptions?user_id=eq.${encodeURIComponent(user.id)}&select=tier,status,created_at,updated_at,paypal_subscription_id&order=created_at.desc&limit=50`
     );
-    const latest = Array.isArray(rows) ? rows[0] : null;
-    if (!latest) return json(200, { tier: 'free', status: 'none' });
-    const active = latest.status === 'active' && ['plus', 'pro'].includes(latest.tier);
+    const records = Array.isArray(rows) ? rows : [];
+    const active = records.find((row) =>
+      String(row.status || '').toLowerCase() === 'active' &&
+      ['plus', 'pro'].includes(String(row.tier || '').toLowerCase())
+    );
+    const selected = active || records[0] || null;
+
+    if (!selected) return json(200, { tier: 'free', status: 'none' });
+
+    const status = String(selected.status || 'pending').toLowerCase();
+    const tier = String(selected.tier || '').toLowerCase();
+    const isActive = status === 'active' && ['plus', 'pro'].includes(tier);
     return json(200, {
-      tier: active ? latest.tier : 'free',
-      status: latest.status || 'pending'
+      tier: isActive ? tier : 'free',
+      status,
+      subscription_status: status
     });
   } catch (error) {
     return json(500, { error: error.message || 'Could not check membership.' });
